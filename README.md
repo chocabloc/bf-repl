@@ -1,2 +1,2 @@
 # bf-repl
-A Brainfuck interpreter with an REPL written in assembly
+A Brainfuck interpreter with an REPL, written in assembly
