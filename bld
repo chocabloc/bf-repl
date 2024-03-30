@@ -1,8 +1,5 @@
 #! /bin/bash
 
-nasm bf.asm -o bf.bin
-echo "section .blah" | nasm -felf64 -o empty.o /dev/stdin
-objcopy --add-section .text=bf.bin empty.o bf.o
-objcopy --remove-section .blah bf.o
-ld -T link.ld -N -o bf bf.o
-rm bf.bin bf.o empty.o
+nasm -f elf64 -o bf.o bf.asm
+ld -s -Ttext=0x100e8 -o bf bf.o
+rm bf.o
