@@ -4,7 +4,7 @@ A [Brainfuck](https://en.m.wikipedia.org/wiki/Brainfuck) interpreter+REPL for x8
 ## Specifics
 * Supports program size upto 64 KiB and has 65536 cells.
 * Doesn't require any third-party libraries (not even a `libc`).
-* The minimal version (`bf-min`) is just 341 bytes! (WIP)
+* The minimal version (`bf-min`) is just 316 bytes! (WIP)
 * Can be used interactively or by loading the code from a file.
 
 ## Build Instructions
