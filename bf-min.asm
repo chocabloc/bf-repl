@@ -11,13 +11,7 @@ db 2						; bits, 2 for 64
 db 1						; endianness, 1 for little
 db 1						; should be 1
 db 0						; ABI, 0 for System V
-
-; 8 unused bytes, put exit function here
-exit:
-mov rax, 60
-syscall
-db 0
-
+dq 0						; unused
 dw 2						; type, 2 for executable
 dw 0x3e						; ISA, 0x3e for amd64
 
@@ -33,11 +27,12 @@ dq phdr_off					; phdr table offset
 ; size of elf header here, but
 ; linux doesn't care, again
 init:
-xor ebp, ebp   ; cell pointer
+mov	qword r15, [rsp]
+;xor ebp, ebp   ; cell pointer
 xor ebx, ebx    ; instruction pointer
-cmp qword [rsp], 1
-je repl
-jne start
+dec r15
+jz repl
+jnz start
 db 0
 
 dw 0x38						; size of phdr entry
@@ -56,7 +51,12 @@ dd 1						; type, 1 for PT_LOAD
 dd 0b111					; flags, R+W+X
 dq 0						; offset, load from the beginning
 dq 0x10000					; virtual address to load at
-dq 0						; physical address, unneeded
+; 8 unused bytes, put exit function here
+exit:
+mov rax, 60
+syscall
+db 0
+
 dq filesize					; size of segment in file
 dq memsize					; size of segment in memory
 ; 8 bytes containing alignment here
@@ -71,7 +71,7 @@ CELLS            equ PP_BUFF + PP_BUFF_MAX_SIZE
 start:
 
 ; open file
-mov eax, 2
+mov al, 2
 mov rdi, [rsp + 16]
 xor esi, esi
 syscall
@@ -81,10 +81,10 @@ jmp readInput
 repl:
 	
 	; print prompt
-	mov eax, 1
-	mov edi, 1
+	mov al, 1
+	mov dil, 1
 	mov esi, strPrompt
-	mov edx, strPromptLen
+	mov dl, strPromptLen
 	syscall
 	
 	xor edi, edi
@@ -101,19 +101,19 @@ repl:
 	; preprocess program
 	; go backwards
 	ppLoop:
-		cmp byte [PROG_BUFF + rax], ']'
+		mov byte dl, [PROG_BUFF + rax]
+		cmp dl, ']'
 		jne .nst
 		push rax
 		.nst:
-		cmp byte [PROG_BUFF + rax], '['
+		cmp dl, '['
 		jne .nnd
-		pop rcx
-		mov qword [PP_BUFF + rax*8], rcx
+		pop qword [PP_BUFF + rax*8]
 		.nnd:
 		dec eax
 		jns ppLoop
 
-	mov edx, 1      ; bytes to read/write
+	shr edx, 16      ; 1 (bytes to read/write)
 	
 	execLoop:
 		xor eax, eax
@@ -130,7 +130,7 @@ repl:
 		dec ebp
 		
 		.notLeft:
-		lea esi, [CELLS + ebp]
+		lea esi, [CELLS + rbp]
 		mov ch, [esi]
 		cmp cl, '+'
 		jne .notInc
@@ -142,7 +142,7 @@ repl:
 		dec ch
 		
 		.notDec:
-		mov byte [CELLS + ebp], ch
+		mov byte [CELLS + rbp], ch
 		cmp cl, '.'
 		jne .notPrt
 		inc eax
@@ -179,8 +179,8 @@ repl:
 		cmp rbx, r8
 		jl execLoop
 	
-	cmp qword [rsp], 1
-	je repl
+	test r15, r15
+	jz repl
 
 jmp exit
 
