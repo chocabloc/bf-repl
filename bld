@@ -3,3 +3,6 @@
 nasm -f elf64 -o bf.o bf.asm
 ld -s -Ttext=0x100e8 -o bf bf.o
 rm bf.o
+
+nasm bf-min.asm -o bf-min
+chmod +x bf-min
