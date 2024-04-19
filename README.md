@@ -11,12 +11,11 @@ A [Brainfuck](https://en.m.wikipedia.org/wiki/Brainfuck) interpreter+REPL for x8
 
 Make sure `nasm` and `binutils` are installed. Clone the repository and run `./bld`.
 
-Alternatively, get the latest binary release from [Releases](huh)
+Alternatively, get the latest binary release from [Releases](huh).
 
 ## Usage
 
-Run `./bf` for the REPL or `./bf <filename>` to run code from a file.
-To exit the REPL, simply give it an empty command.
+Run `./bf` for the REPL or `./bf <filename>` to run code from a file. To exit, simply give it an empty command.
 > [!NOTE]
 > Within a session, the position of the data pointer, as well as the data itself, is preserved across commands.
 
