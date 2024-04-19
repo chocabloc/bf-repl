@@ -11,7 +11,7 @@ A [Brainfuck](https://en.m.wikipedia.org/wiki/Brainfuck) interpreter+REPL for x8
 
 Make sure `nasm` and `binutils` are installed. Clone the repository and run `./bld`.
 
-Alternatively, get the latest binary release from [Releases](huh).
+Alternatively, get the latest binary release from [here](https://github.com/chocabloc/bf-repl/releases).
 
 ## Usage
 
